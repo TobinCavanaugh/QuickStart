@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using Microsoft.VisualBasic;
 
 namespace QuickStart
 {
@@ -17,7 +15,7 @@ namespace QuickStart
             {
                 p.aliases.ForEach((a) =>
                 {
-                    if (target.Trim() == a.Trim())
+                    if (target == a)
                     {
                         found = p;
                     }
@@ -34,15 +32,21 @@ namespace QuickStart
             return false;
         }
 
-        public bool GetByPath(string path, out QProgram program)
+        public bool GetByPath(string path, bool getOnly, out QProgram program)
         {
             foreach (var p in programs)
             {
-                if (p.path == path)
+                if (p.Path == path)
                 {
                     program = p;
                     return true;
                 }
+            }
+
+            if (getOnly)
+            {
+                program = null;
+                return false;
             }
 
 
@@ -66,7 +70,7 @@ namespace QuickStart
 
         public bool AddAliasesPath(string path, string[] newAliases, out QProgram program)
         {
-            if (GetByPath(path, out program))
+            if (GetByPath(path, true, out program))
             {
                 program.aliases.AddUniqueRange(newAliases);
                 invalidated = true;
@@ -75,7 +79,7 @@ namespace QuickStart
             {
                 var p = new QProgram();
                 p.aliases = newAliases.ToList();
-                p.path = path;
+                p.Path = path;
                 programs.Add(p);
             }
 
@@ -84,14 +88,14 @@ namespace QuickStart
 
         public bool AddPath(string path, out QProgram program)
         {
-            if (programs.Any(x => x.path == path))
+            if (programs.Any(x => x.Path == path))
             {
                 program = null;
                 return false;
             }
             else
             {
-                var q = new QProgram(){path = path};
+                var q = new QProgram(){Path = path};
                 program = q;
                 programs.Add(q);
                 return true;
