@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.CommandLine;
+using System.CommandLine.Invocation;
 using System.IO;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using Newtonsoft.Json;
-using System.Runtime.InteropServices;
 using Microsoft.WindowsAPICodePack.Shell;
 using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
+using Newtonsoft.Json;
 
 namespace QuickStart
 {
     public class Program
     {
+        public static string version = "1.0";
+
         public static async Task Main(string[] args)
         {
             var rootCommand = new RootCommand("Quickstart / qs, a simple CLI program quick launcher");
@@ -39,7 +40,30 @@ namespace QuickStart
             new AliasAddCommands(rootCommand, qss);
 
 
-            //Run via path **************************************************** 
+            //Splash Screen version ******************************************************************
+            {
+                var splashCommand = new Command("version", "Version splashscreen");
+                rootCommand.Add(splashCommand);
+
+                var splashCommandAlt = new Command("v", "Version splashscreen");
+                rootCommand.Add(splashCommandAlt);
+
+                var handleAction = new Action<InvocationContext>(h =>
+                {
+                    SplashScreen.PrintSplashScreen(SplashScreen.GetSplashScreen());
+                    //Console.WriteLine("\n");
+                    //                    Console.WriteLine("----------------------------------------");
+                    SplashScreen.CenterPrint("-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-");
+                    SplashScreen.CenterPrint("[Quickstart]");
+                    SplashScreen.CenterPrint($"[Version {version}]");
+                    SplashScreen.CenterPrint("[Tobin Cavanaugh]");
+                    SplashScreen.CenterPrint(@"[https://github.com/TobinCavanaugh/QuickStart]");
+                });
+
+                splashCommand.SetHandler(h => handleAction.Invoke(h));
+                splashCommandAlt.SetHandler(h => handleAction.Invoke(h));
+            }
+            //Run via path ***************************************************************
             {
                 var runPath = new Command("p", "Run via path");
                 rootCommand.Add(runPath);
@@ -138,7 +162,7 @@ namespace QuickStart
 
             //Add Path Browse *****************************************************************
             {
-                var browseCommand = new Command("+papp", "");
+                var browseCommand = new Command("+papp", "Add an existing windows application (Untested)");
                 rootCommand.Add(browseCommand);
 
                 //HKEY_CLASSES_ROOT\Extensions\ContractId\Windows.Protocol\PackageId
@@ -148,7 +172,8 @@ namespace QuickStart
                     // GUID taken from https://learn.microsoft.com/en-us/windows/win32/shell/knownfolderid
                     var FOLDERID_AppsFolder = new Guid("{1e87508d-89c2-42f0-8a7e-645a0f50ca58}");
                     ShellObject appsFolder = (ShellObject)KnownFolderHelper.FromKnownFolderId(FOLDERID_AppsFolder);
-                    List<KeyValuePair<string, string>> appNamePathDictionary = new List<KeyValuePair<string, string>>();
+                    List<KeyValuePair<string, string>> appNamePathDictionary =
+                        new List<KeyValuePair<string, string>>();
 
                     foreach (var app in (IKnownFolder)appsFolder)
                     {
@@ -200,7 +225,6 @@ namespace QuickStart
 
                     qss.AddPath(resultPath, out var prog);
                     prog.aliases.AddUnique(resultAlias);
-
                 });
             }
 
@@ -313,7 +337,8 @@ namespace QuickStart
                     foreach (var program in qss.programs)
                     {
                         tablePrinter.SetCell(yOffset, 0, program.Path);
-                        tablePrinter.SetCell(yOffset, 1, "\"" + string.Join("\",\"", program.aliases.ToArray()) + "\"");
+                        tablePrinter.SetCell(yOffset, 1,
+                            "\"" + string.Join("\",\"", program.aliases.ToArray()) + "\"");
                         tablePrinter.SetCell(yOffset, 2, string.Join(",", program.keywords.ToArray()));
                         yOffset++;
                     }
