@@ -67,7 +67,7 @@ namespace QuickStart
             return true;
         }
 
-        
+
         public bool AddAliases(string oldAlias, string[] newAliases, out QProgram program)
         {
             if (GetByAlias(oldAlias, out program))
@@ -125,6 +125,22 @@ namespace QuickStart
                 programs.Add(q);
                 return true;
             }
+        }
+
+        /// <summary>
+        /// Removes a program based on a particular path
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public bool RemoveProgramViaPath(string path)
+        {
+            int amountRemoved = programs.RemoveAll(x => x.Path == path);
+            if (amountRemoved > 0)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

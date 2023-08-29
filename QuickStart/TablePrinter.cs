@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Dynamic;
-using System.Runtime.Remoting.Metadata;
-using System.Security.Policy;
 using System.Text;
 
 namespace QuickStart
@@ -88,7 +85,11 @@ namespace QuickStart
                 result.Append(PadLeftRight(header[i], widest[i] + headerWidthAdd, line));
             }
 
+
+
+
             result.Append(jointDelim + "\n");
+
 
             foreach (var row in grid)
             {
