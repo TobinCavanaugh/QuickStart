@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using Microsoft.WindowsAPICodePack.Shell;
 using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
@@ -15,11 +16,49 @@ namespace QuickStart
         {
             //Install quickstart to Program Files
             {
-                Process.Start("cmd",
-                    @"mkdir C:\Program Files\QuickStart\" + "\n" +
-                    @"cd C:\Program Files\QuickStart" + "\n" +
-                    @"git clone "
-                );
+                var symlinkCommand = new Command("setup",
+                    "ONLY RUN IF THIS FOLDER IS IN A PERMANENT PLACE. Creates a symlink so quickstart can be called anywhere with qs.");
+                rootCommand.Add(symlinkCommand);
+
+                symlinkCommand.SetHandler(h =>
+                {
+                    string symlinkPath =
+                        Path.Combine("C:\\", "qs.exe");
+                    string targetPath =
+                        $"{AppDomain.CurrentDomain.BaseDirectory}QuickStart.exe"; // Replace with the actual path to your application
+
+                    Console.WriteLine("QuickStart Path: " + targetPath);
+                    Console.WriteLine("Symlink Path:" + symlinkPath);
+
+
+                    // Create the symbolic link using the mklink command
+                    ProcessStartInfo psi = new ProcessStartInfo
+                    {
+                        FileName = "cmd.exe",
+                        RedirectStandardInput = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                        Verb = "runas",
+                        Arguments = $"/c mklink \"{symlinkPath}\" \"{targetPath}\"",
+                    };
+
+                    Process process = new Process
+                    {
+                        StartInfo = psi,
+                    };
+
+                    Console.WriteLine("Calling, " + psi.Arguments);
+
+                    process.Start();
+
+                    process.WaitForExit();
+                    Console.WriteLine(
+                        "Symlink creation attempted. Try calling qs to see if it worked. If not go to //TODO");
+
+                    // Run the mklink command to create the symbolic link
+//                    process.StandardInput.WriteLine();
+                    //                  process.StandardInput.Close();
+                });
             }
 
 
