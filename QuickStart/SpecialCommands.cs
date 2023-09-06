@@ -8,7 +8,7 @@ using System.Linq;
 using Microsoft.WindowsAPICodePack.Shell;
 using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 
-namespace QuickStart
+namespace QSn
 {
     public class SpecialCommands
     {

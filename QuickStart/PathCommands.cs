@@ -2,7 +2,7 @@
 using System.CommandLine;
 using System.Linq;
 
-namespace QuickStart
+namespace QSn
 {
     public class PathCommands
     {

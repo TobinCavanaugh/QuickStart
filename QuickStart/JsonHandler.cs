@@ -2,7 +2,7 @@
 using System.IO;
 using Newtonsoft.Json;
 
-namespace QuickStart
+namespace QSn
 {
     public class JsonHandler
     {
@@ -41,10 +41,10 @@ namespace QuickStart
         public static void UpdateQuickstartSave(QuickstartSave qss)
         {
             InitConfigPath();
-            if (qss.invalidated)
-            {
+            //if (qss.invalidated)
+            //{
                 File.WriteAllText(configPath, JsonConvert.SerializeObject(qss));
-            }
+            //}
         }
     }
 }

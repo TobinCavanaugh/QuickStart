@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace QuickStart
+namespace QSn
 {
     public class SplashScreen
     {

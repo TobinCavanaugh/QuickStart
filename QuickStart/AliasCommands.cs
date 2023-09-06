@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.CommandLine;
 using System.Linq;
 
-namespace QuickStart
+namespace QSn
 {
     public class AliasCommands
     {
@@ -158,7 +158,7 @@ namespace QuickStart
                 {
                     TablePrinter tablePrinter = new TablePrinter();
 
-                    tablePrinter.header = new List<string>() { "Path", "Aliases", "Keywords" };
+                    tablePrinter.header = new List<string>() { "Path", "Aliases", "Keywords", "Admin"};
                     int yOffset = 0;
 
                     var sorted = qss.programs.OrderBy(x =>
@@ -175,9 +175,33 @@ namespace QuickStart
                             "\"" + string.Join("\",\"", program.aliases.ToArray()) + "\"");
                         tablePrinter.SetCell(yOffset, 2, string.Join(",", program.keywords.ToArray()));
                         yOffset++;
+                        tablePrinter.SetCell(yOffset, 3, program.useAdmin.ToString());
                     }
 
                     Console.WriteLine(tablePrinter.ToString());
+                });
+            }
+
+            {
+                var adminCommand = new Command("ar", "Admin Run, runs the program as admin");
+                rootCommand.Add(adminCommand);
+
+                var aliasArg = new Argument<string>("Alias", "The name of the alias to change");
+                adminCommand.AddArgument(aliasArg);
+                
+                var stateArg = new Argument<bool>("State", "True runs as admin, False runs as regular");
+                adminCommand.AddArgument(stateArg);
+                
+                adminCommand.SetHandler(h =>
+                {
+
+                    bool state = h.ParseResult.GetValueForArgument(stateArg);
+                    string alias = h.ParseResult.GetValueForArgument(aliasArg);
+
+                    if (qss.GetByAlias(alias, out QProgram program))
+                    {
+                        program.useAdmin = state;
+                    }
                 });
             }
         }

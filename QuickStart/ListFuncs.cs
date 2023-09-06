@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace QuickStart
+namespace QSn
 {
     public static class ListFuncs
     {

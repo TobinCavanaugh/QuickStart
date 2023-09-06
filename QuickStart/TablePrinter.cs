@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuickStart
+namespace QSn
 {
     public class TablePrinter
     {
         public List<string> header = new List<string>();
         public List<List<string>> grid = new List<List<string>>();
 
+        public int maxFieldWidth = 64;
 
         public TablePrinter()
         {
@@ -22,7 +23,7 @@ namespace QuickStart
             int columnCount = 0;
             grid.ForEach(x => columnCount = Math.Max(columnCount, x.Count));
 
-            int[] widths = new int[columnCount];
+            int[] widths = new int[header.Count];
 
             foreach (var row in grid)
             {
@@ -34,6 +35,11 @@ namespace QuickStart
 
             for (int i = 0; i < header.Count; i++)
             {
+                if (widths == null)
+                {
+                    continue;
+                }
+
                 widths[i] = Math.Max(header[i].Length, widths[i]) + addition;
 
                 if (widths[i] % 2 != 0)
@@ -47,6 +53,8 @@ namespace QuickStart
 
         string PadLeftRight(string value, int maxLength, string padding = " ")
         {
+            value = value.Substring(0, Math.Min(value.Length, maxFieldWidth));
+            
             string leftPad = "";
             for (int i = 0; i < (maxLength - value.Length) / 2; i++)
             {
@@ -66,6 +74,12 @@ namespace QuickStart
                 result += padding;
             }
 
+            if (result.Length >= maxFieldWidth)
+            {
+                result = result.Substring(maxFieldWidth - 3);
+                result += "...";
+            }
+            
             return result;
         }
 
@@ -84,12 +98,8 @@ namespace QuickStart
                 result.Append(jointDelim);
                 result.Append(PadLeftRight(header[i], widest[i] + headerWidthAdd, line));
             }
-
-
-
-
+            
             result.Append(jointDelim + "\n");
-
 
             foreach (var row in grid)
             {
