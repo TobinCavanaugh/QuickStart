@@ -9,7 +9,7 @@ namespace QSn
         public List<string> header = new List<string>();
         public List<List<string>> grid = new List<List<string>>();
 
-        public int maxFieldWidth = 64;
+        public int maxFieldWidth = 50;
 
         public TablePrinter()
         {
