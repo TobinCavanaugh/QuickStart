@@ -13,9 +13,7 @@ namespace QSn
 
         public TablePrinter()
         {
-            var a = new List<string>();
-            a.Add("");
-            grid.Add(a);
+            grid.Add(new List<string>() {""});
         }
 
         private int[] CalculateCellWidths(int addition)
@@ -51,18 +49,27 @@ namespace QSn
             return widths;
         }
 
-        string PadLeftRight(string value, int maxLength, string padding = " ")
+        string PadLeftRight(string value, int maxLength, string padding = " ", string ending = "...")
         {
-            value = value.Substring(0, Math.Min(value.Length, maxFieldWidth));
-            
+            value = value.Trim();
+
+            if (value.Length >= maxFieldWidth)
+            {
+                value = value.Substring(Math.Max(value.Length - maxFieldWidth, 0));
+                // value = value.Substring(value.Length- ending.Length);
+
+                value = value.Substring(ending.Length);
+                value = ending + value;
+            }
+
             string leftPad = "";
-            for (int i = 0; i < (maxLength - value.Length) / 2; i++)
+            for (int i = 0; i < (Math.Min(maxLength, maxFieldWidth) - value.Length) / 2; i++)
             {
                 leftPad += padding;
             }
 
             string rightPad = "";
-            for (int i = 0; i < (maxLength - value.Length) / 2; i++)
+            for (int i = 0; i < (Math.Min(maxLength, maxFieldWidth) - value.Length) / 2; i++)
             {
                 rightPad += padding;
             }
@@ -74,12 +81,7 @@ namespace QSn
                 result += padding;
             }
 
-            if (result.Length >= maxFieldWidth)
-            {
-                result = result.Substring(maxFieldWidth - 3);
-                result += "...";
-            }
-            
+
             return result;
         }
 
@@ -96,9 +98,9 @@ namespace QSn
             for (int i = 0; i < header.Count; i++)
             {
                 result.Append(jointDelim);
-                result.Append(PadLeftRight(header[i], widest[i] + headerWidthAdd, line));
+                result.Append(PadLeftRight(header[i], widest[i] + headerWidthAdd, line, "---"));
             }
-            
+
             result.Append(jointDelim + "\n");
 
             foreach (var row in grid)
@@ -122,7 +124,7 @@ namespace QSn
             for (int i = 0; i < header.Count; i++)
             {
                 result.Append(jointDelim);
-                result.Append(PadLeftRight("", widest[i] + headerWidthAdd, line));
+                result.Append(PadLeftRight("", widest[i] + headerWidthAdd, line, "---"));
             }
 
             result.Append(jointDelim);

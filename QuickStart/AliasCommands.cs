@@ -174,8 +174,8 @@ namespace QSn
                         tablePrinter.SetCell(yOffset, 1,
                             "\"" + string.Join("\",\"", program.aliases.ToArray()) + "\"");
                         tablePrinter.SetCell(yOffset, 2, string.Join(",", program.keywords.ToArray()));
-                        yOffset++;
                         tablePrinter.SetCell(yOffset, 3, program.useAdmin.ToString());
+                        yOffset++;
                     }
 
                     Console.WriteLine(tablePrinter.ToString());
