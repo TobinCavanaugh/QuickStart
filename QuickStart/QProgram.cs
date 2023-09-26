@@ -51,6 +51,7 @@ namespace QSn
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 return false;
             }
         }
