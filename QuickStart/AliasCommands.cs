@@ -162,7 +162,8 @@ namespace QSn
                 {
                     TablePrinter tablePrinter = new TablePrinter();
 
-                    tablePrinter.header = new List<string>() {"Path", "Aliases", "Keywords", "Admin"};
+                    // "Keywords"
+                    tablePrinter.header = new List<string>() {"Path", "Aliases", "Admin"};
                     int yOffset = 0;
 
                     var sorted = qss.programs.OrderBy(x =>
@@ -176,17 +177,19 @@ namespace QSn
                     {
                         //Add the path itself
                         tablePrinter.SetCell(yOffset, 0, program.Path);
-                        
+
                         //Add the aliases
                         tablePrinter.SetCell(yOffset, 1,
-                            "\"" + string.Join("\",\"", program.aliases.ToArray()) + "\"");
-                        
+                            "\"" +
+                            string.Join("\",\"", program.aliases.OrderBy(x => x.Length)
+                                .ThenBy(x => x).ToArray()) + "\"");
+
                         //Add the keywords
-                        tablePrinter.SetCell(yOffset, 2, string.Join(",", program.keywords.ToArray()));
-                        
+                        // tablePrinter.SetCell(yOffset, 2, string.Join(",", program.keywords.ToArray()));
+
                         //Add if it uses admin or not
-                        tablePrinter.SetCell(yOffset, 3, program.useAdmin.ToString());
-                        
+                        tablePrinter.SetCell(yOffset, 2, program.useAdmin.ToString());
+
                         yOffset++;
                     }
 

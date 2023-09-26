@@ -22,42 +22,11 @@ namespace QSn
 
                 symlinkCommand.SetHandler(h =>
                 {
-                    string symlinkPath =
-                        Path.Combine("C:\\", "qs.exe");
-                    string targetPath =
-                        $"{AppDomain.CurrentDomain.BaseDirectory}QuickStart.exe"; // Replace with the actual path to your application
-
-                    Console.WriteLine("QuickStart Path: " + targetPath);
-                    Console.WriteLine("Symlink Path:" + symlinkPath);
-
-
-                    // Create the symbolic link using the mklink command
-                    ProcessStartInfo psi = new ProcessStartInfo
-                    {
-                        FileName = "cmd.exe",
-                        RedirectStandardInput = true,
-                        UseShellExecute = false,
-                        CreateNoWindow = true,
-                        Verb = "runas",
-                        Arguments = $"/c mklink \"{symlinkPath}\" \"{targetPath}\"",
-                    };
-
-                    Process process = new Process
-                    {
-                        StartInfo = psi,
-                    };
-
-                    Console.WriteLine("Calling, " + psi.Arguments);
-
-                    process.Start();
-
-                    process.WaitForExit();
-                    Console.WriteLine(
-                        "Symlink creation attempted. Try calling qs to see if it worked. If not go to //TODO");
-
-                    // Run the mklink command to create the symbolic link
-//                    process.StandardInput.WriteLine();
-                    //                  process.StandardInput.Close();
+                    var name = "PATH";
+                    var scope = EnvironmentVariableTarget.Machine; // or User
+                    var oldValue = Environment.GetEnvironmentVariable(name, scope);
+                    var newValue = oldValue + ";" + AppDomain.CurrentDomain.BaseDirectory;
+                    Environment.SetEnvironmentVariable(name, newValue, scope);
                 });
             }
 
@@ -88,11 +57,8 @@ namespace QSn
             {
                 var printSave = new Command("sp", "Print the save path");
                 rootCommand.Add(printSave);
-                
-                printSave.SetHandler(h =>
-                {
-                    Console.WriteLine(JsonHandler.configPath);
-                });
+
+                printSave.SetHandler(h => { Console.WriteLine(JsonHandler.configPath); });
             }
 
             //List windows apps  *****************************************************************
