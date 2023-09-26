@@ -21,7 +21,7 @@ namespace QSn
             int columnCount = 0;
             grid.ForEach(x => columnCount = Math.Max(columnCount, x.Count));
 
-            int[] widths = new int[header.Count];
+            int[] widths = new int[Math.Max(header.Count, columnCount)];
 
             foreach (var row in grid)
             {
@@ -85,8 +85,9 @@ namespace QSn
             return result;
         }
 
-        public override string ToString()
+        public string ToString()
         {
+
             StringBuilder result = new StringBuilder();
             int[] widest = CalculateCellWidths(2);
             int headerWidthAdd = 0;
@@ -169,6 +170,21 @@ namespace QSn
                     grid[i].Add("");
                 }
             }
+        }
+
+        public string ToStringNoFormat()
+        {
+            StringBuilder value = new StringBuilder();
+
+            value.Append(string.Join(" | ", header));
+
+            for (int i = 0; i < grid.Count; i++)
+            {
+                value.Append("\n");
+                value.Append(string.Join(" | ", grid[i]));
+            }
+
+            return value.ToString();
         }
     }
 }

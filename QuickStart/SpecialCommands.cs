@@ -84,13 +84,27 @@ namespace QSn
                 splashCommandAlt.SetHandler(h => handleAction.Invoke(h));
             }
 
+            //Print the save path **************************************************************
+            {
+                var printSave = new Command("sp", "Print the save path");
+                rootCommand.Add(printSave);
+                
+                printSave.SetHandler(h =>
+                {
+                    Console.WriteLine(JsonHandler.configPath);
+                });
+            }
+
             //List windows apps  *****************************************************************
             {
                 var browseCommand = new Command("wappl",
                     "(Windows Application List) List installed windows apps in the AppsFolder");
                 rootCommand.Add(browseCommand);
 
-                //Maybe check registry later?
+                var fullPath = new Option<bool>("--nf", "Prints with No Formatting");
+                browseCommand.AddOption(fullPath);
+
+                //TODO Maybe check registry later?
                 //HKEY_CLASSES_ROOT\Extensions\ContractId\Windows.Protocol\PackageId
 
                 browseCommand.SetHandler(h =>
@@ -99,11 +113,11 @@ namespace QSn
                     //GUID taken from https://learn.microsoft.com/en-us/windows/win32/shell/knownfolderid
                     var FOLDERID_AppsFolder = new Guid("{1e87508d-89c2-42f0-8a7e-645a0f50ca58}");
                     ShellObject appsFolder =
-                        (ShellObject)KnownFolderHelper.FromKnownFolderId(FOLDERID_AppsFolder);
+                        (ShellObject) KnownFolderHelper.FromKnownFolderId(FOLDERID_AppsFolder);
                     List<KeyValuePair<string, string>> appNamePathDictionary =
                         new List<KeyValuePair<string, string>>();
 
-                    foreach (var app in (IKnownFolder)appsFolder)
+                    foreach (var app in (IKnownFolder) appsFolder)
                     {
                         string name = app.Name;
                         // Accessing the properties of the app
@@ -111,7 +125,6 @@ namespace QSn
                             app.Properties.GetProperty(SystemProperties.System.Link.TargetParsingPath);
 
                         string path = linkPathProperty?.ValueAsObject as string;
-
 
                         if (path != null && name != null)
                         {
@@ -125,13 +138,20 @@ namespace QSn
                     int iterator = 0;
                     foreach (var keyValuePair in appNamePathDictionary)
                     {
-                        printer.SetCell(iterator, 0, keyValuePair.Value);
-                        printer.SetCell(iterator, 1, keyValuePair.Key);
+                        printer.SetCell(iterator, 0, keyValuePair.Key);
+                        printer.SetCell(iterator, 1, keyValuePair.Value);
                         iterator++;
-//                        Console.WriteLine(keyValuePair.Value + " | " + keyValuePair.Key);
                     }
 
-                    Console.WriteLine(printer.ToString());
+                    var opt = h.ParseResult.GetValueForOption(fullPath);
+                    if (opt)
+                    {
+                        Console.WriteLine(printer.ToStringNoFormat());
+                    }
+                    else
+                    {
+                        Console.WriteLine(printer.ToString());
+                    }
                 });
             }
         }
