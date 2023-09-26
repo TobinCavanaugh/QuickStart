@@ -29,6 +29,10 @@ Q:::::::QQ::::::::QSSSSSSS     S:::::S
             return returnVal;
         }
 
+        /// <summary>
+        /// Prints the splashscreen
+        /// </summary>
+        /// <param name="splashScreen"></param>
         public static void PrintSplashScreen(string splashScreen)
         {
             foreach (var line in splashScreen.Split('\n'))
@@ -38,6 +42,10 @@ Q:::::::QQ::::::::QSSSSSSS     S:::::S
             }
         }
         
+        /// <summary>
+        /// Prints centered relative to the command prompt
+        /// </summary>
+        /// <param name="inString"></param>
         public static void CenterPrint(string inString)
         {
             var result = String.Format("{0," + ((Console.WindowWidth / 2) + (inString.Length / 2)) + "}",
