@@ -35,7 +35,14 @@ A CLI program launcher made for ease of use.
 
 
 ### Media:
+`qs version` / `qs v`
 ![](GitPage/qs_version.png)
+
+`qs -?`
 ![](GitPage/qs.png)
+
+`qs al`
 ![](GitPage/qs_al.gif)
+
+`qs pl`
 ![](GitPage/qs_pl.png)
