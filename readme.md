@@ -17,7 +17,7 @@ A CLI program launcher made for ease of use.
 <br/><img src="GitPage/qs_a.png" alt="qs a vi" width="255"/>
 5. You can append new aliases at any point by calling `qs +aa <original> <new>`. Just like `+a` you can do an arbitrary amount of new paths.
 
-### General Use:
+### Command List `qs -?`:
 - `qs +a <Path> <Aliases>` adds a program via its path, use any amount of space separated aliases.
 - `qs +aa <Original> <Aliases>` to add aliases to an existing alias. Original is the original alias, Aliases are the space seperated new aliases.
 - `qs a <Alias>` command to launch your program.
