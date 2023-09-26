@@ -23,6 +23,7 @@ A CLI program launcher made for ease of use.
 4. Your program can now be launched by calling `qs a <Alias>`!
    <br/><img src="GitPage/qs_a.png" alt="qs a vi" width="255"/>
 5. You can append new aliases at any point by calling `qs +aa <original> <new>`. Just like `+a` you can do an arbitrary amount of new paths.
+<br/><img src="GitPage/qs_+aa.png" alt="qs a vi" width="355"/>
 
 ---
 
@@ -47,10 +48,10 @@ A CLI program launcher made for ease of use.
 
 ### Media:
 
-> `qs version` / `qs v` > ![](GitPage/qs_version.png)
+> `qs version` / `qs v` ![](GitPage/qs_version.png)
 
-> `qs -?` > ![](GitPage/qs.png)
+> `qs -?` ![](GitPage/qs.png)
 
-> `qs al` > ![](GitPage/qs_al.gif)
+> `qs al` ![](GitPage/qs_al.gif)
 
-> `qs pl` > ![](GitPage/qs_pl.png)
+> `qs pl` ![](GitPage/qs_pl.png)
